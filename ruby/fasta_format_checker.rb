@@ -201,6 +201,7 @@ class FastaFormatChecker
 
     sw = Sprichwort.new
 
+
     # send mail with results link to user
     mail = mail(message, sw.sprichwort)
 

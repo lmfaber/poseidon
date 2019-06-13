@@ -108,7 +108,7 @@ class Tex
     m2_percent = (percentage_sites_m2[percentage_sites_m2.length-1].to_f * 100).round(2)
     m2_average_omega = (average_omega_of_sites_m2[average_omega_of_sites_m2.length-1].to_f).round(2)
 
-
+    
     ## get log likelihoods to calculate significane values for M7 vs M8 and M1a vs M2a
     dof_m7 = nil; likelihood_m7 = nil; dof_m8 = nil; likelihood_m8 = nil
     dof_m8a = nil; likelihood_m8a = nil
@@ -133,7 +133,7 @@ class Tex
           dof_m8a = dof; likelihood_m8a = likelihood
       end
     end
-
+    
     #puts "Model M1a: d.o.f. = #{dof_m1a}; log likelihood = #{likelihood_m1a}"
     #puts "Model M2a: d.o.f. = #{dof_m2a}; log likelihood = #{likelihood_m2a}"
     #puts "Model M7: d.o.f. = #{dof_m7}; log likelihood = #{likelihood_m7}"
@@ -155,7 +155,7 @@ class Tex
     pvalue_m7_m8 = chi2(lrt_m7_m8, dof_m7_m8)
     pvalue_m1a_m2a = chi2(lrt_m1a_m2a, dof_m1a_m2a)
     pvalue_m8a_m8 = chi2(lrt_m8a_m8, dof_m8a_m8)
-
+    
     @significance_m8 = LRT.new(lrt_m7_m8, pvalue_m7_m8, likelihood_m7, likelihood_m8, m8_percent, m8_average_omega)
     @significance_m2a = LRT.new(lrt_m1a_m2a, pvalue_m1a_m2a, likelihood_m1a, likelihood_m2a, m2_percent, m2_average_omega)
     @significance_m8a = LRT.new(lrt_m8a_m8, pvalue_m8a_m8, likelihood_m8a, likelihood_m8, m8_percent, m8_average_omega)
@@ -168,7 +168,7 @@ class Tex
         title_save << title_char
       end
     end
-
+    
     # build tex for M7 vs M8
     tex_m7_m8 = "\\documentclass[10pt,a4paper,oneside]{article}\n\\usepackage{multirow}\n\\usepackage{booktabs}\n\\usepackage{longtable}\n\\setlength\\LTcapwidth{1.4\\textwidth}\n\\setlength\\LTleft{0pt}\n\\setlength\\LTright{0pt}\n\n\\usepackage[top=1in, bottom=1.25in, left=1.0in, right=1.25in]{geometry}\n\n\\begin{document}\n\n"
     tex_m7_m8 << build_tex_table(beb_m8_entries, lrt_m7_m8, pvalue_m7_m8, number_of_species, length_of_aln, m8_percent, m8_average_omega, frag_start, frag_stop, codon_freq, title_save, nil, frag_is_significant, 'M7', 'M8')
@@ -183,11 +183,11 @@ class Tex
     tex_m1a_m2a = "\\documentclass[10pt,a4paper,oneside]{article}\n\\usepackage{multirow}\n\\usepackage{booktabs}\n\\usepackage{longtable}\n\\setlength\\LTcapwidth{1.4\\textwidth}\n\\setlength\\LTleft{0pt}\n\\setlength\\LTright{0pt}\n\n\\usepackage[top=1in, bottom=1.25in, left=1.0in, right=1.25in]{geometry}\n\n\\begin{document}\n\n"
     tex_m1a_m2a << build_tex_table(beb_m2_entries, lrt_m1a_m2a, pvalue_m1a_m2a, number_of_species, length_of_aln, m2_percent, m2_average_omega, frag_start, frag_stop, codon_freq, title_save, nil, frag_is_significant, 'M1a', 'M2a')
     tex_m1a_m2a << "\n\\end{document}\n"
-
+    
     @output_file = File.open(output, 'w')
     @output_file << tex_m7_m8
     @output_file.close
-
+    
     output_file_m8a_m8 = File.open(output.sub('.tex','.M8a_vs_M8.tex'), 'w')
     output_file_m8a_m8 << tex_m8a_m8
     output_file_m8a_m8.close
@@ -195,6 +195,7 @@ class Tex
     output_file_m1a_m2a = File.open(output.sub('.tex','.M1a_vs_M2a.tex'), 'w')
     output_file_m1a_m2a << tex_m1a_m2a
     output_file_m1a_m2a.close
+
 
     [@output_file, output_file_m8a_m8, output_file_m1a_m2a].each do |file|
       Process.fork do

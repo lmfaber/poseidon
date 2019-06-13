@@ -7,13 +7,13 @@ class Gard
   GARD_TEMPLATE_BATCH = '../tools/hyphy/lib/hyphy/TemplateBatchFiles/GARD.bf'
   GARD_PROCESSOR_TEMPLATE_BATCH = '../tools/hyphy/lib/hyphy/TemplateBatchFiles/GARDProcessor.bf'
 
-  #OPENMPI = '../tools/openmpi/bin/mpirun'
+  # OPENMPI = '../tools/openmpi/bin/mpirun'
   OPENMPI = 'mpirun'
   
-  #OPENMPI_RUN = '--allow-run-as-root' # ONLY USE THIS FOR THE DOCKER IMAGE
-  OPENMPI_RUN = '' 
+  OPENMPI_RUN = '--allow-run-as-root' # ONLY USE THIS FOR THE DOCKER IMAGE
+  #OPENMPI_RUN = '' 
   
-  #HYPHYMPI = '../tools/hyphy/bin/HYPHYMPI'
+  # HYPHYMPI = '../tools/hyphy/bin/HYPHYMPI'
   HYPHYMPI = 'hyphympi' # ONLY USE THIS FOR THE DOCKER IMAGE, or mioght also work on our systems
 
 

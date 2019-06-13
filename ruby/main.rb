@@ -128,12 +128,12 @@ class Main
     puts 'BUILD PHYLOGENY...'
     @log << "BUILD PHYLOGENY...\n"
     @parameters['full_aln'] << "#BUILD PHYLOGENY...\n"
-    phylo_dir = "#{@dir}/phylo/"
+    phylo_dir = "#{@dir}/phylo"
     Dir.mkdir(phylo_dir) unless Dir.exists?(phylo_dir)
 
     out_dir = phylo_dir
     phylo_nt = Phylo.new(aln_nt_nogaps, nil, out_dir, :nt, @threads, @root_species, @log, @parameters['full_aln'])
-    phylo_aa = Phylo.new(aln_nt_nogaps, nil, out_dir, :aa, @threads, @root_species, @log, @parameters['full_aln'])
+    phylo_aa = Phylo.new(aln_aa_nogaps, nil, out_dir, :aa, @threads, @root_species, @log, @parameters['full_aln'])
 
     ##############################################################
 
@@ -153,7 +153,7 @@ class Main
     puts 'RUN GARD...'
     @log << "RUN GARD...\n"
     @parameters['full_aln'] << "#RUN GARD...\n"
-    gard_out_dir = "#{@dir}/gard/"
+    gard_out_dir = "#{@dir}/gard"
     Dir.mkdir(gard_out_dir) unless Dir.exists?(gard_out_dir)
     gard = Gard.new(aln_nt_nogaps, nucleotide_bias_model, '2', '3', "#{gard_out_dir}/gard", @threads, kh_insignificant_bp, @parameters['full_aln'])
     @mail_notes << gard.mail_notes if gard.mail_notes.length > 1
@@ -169,7 +169,7 @@ class Main
     puts 'CODEML on full alignment...'
     @log << "CODEML on full alignment...\n"
     @parameters['full_aln'] << "#RUN CODEML ON FULL ALIGNMENT...\n"
-    codeml_full_dir = "#{@dir}/codeml/"
+    codeml_full_dir = "#{@dir}/codeml"
     FileUtils.mkdir_p(codeml_full_dir)
     codeml = Codeml.new(aln_nt_nogaps, phylo_nt.tree_unshod, codeml_full_dir, @parameters['full_aln'])
     puts 'CODEML DONE on full alignment.'
@@ -916,11 +916,14 @@ mail = '' if mail == 'NA'
 output = ARGV[7]
 
 Main.new(dir, fasta, title, root_species, reference_species, kh, mail, output)
-#./main.rb '/mnt/fass2/poseidon-webserver-dev/' '../test_data/bats_mx1.fasta' 'MX1 in bats' '['Rousettus_aegyptiacus', 'Pteropus_alecto', 'Hypsignatus_monstrosus', 'Eidolon_helvum']' '' 'true' 'martin.hoelzer@uni-jena.de' '2019-001'
+# ./main.rb '/mnt/fass2/poseidon-webserver-dev/' '../test_data/bats_mx1.fasta' 'MX1 in bats' '['Rousettus_aegyptiacus', 'Pteropus_alecto', 'Hypsignatus_monstrosus', 'Eidolon_helvum']' '' 'true' 'martin.hoelzer@uni-jena.de' '2019-001'
 ######################################################################################################################################
 ######################################################################################################################################
 end
 
+
+# ./main.rb '/home/output' '/home/fasta/oas1.fasta' 'OAS1 in bats' '['Rousettus_aegyptiacus', 'Pteropus_alecto', 'Hypsignatus_monstrosus', 'Eidolon_helvum']' '' 'true' 'lasse.faber@uni-jena.de' '2019-001'
+# ./main.rb '/mnt/prostlocal/lasse/hiwi/bat/poseidon_results' '/mnt/prostlocal/lasse/hiwi/bat/poseidon_input/oas1.fa' 'OAS1 in bats' '['Pteropus_alecto']' '' 'true' 'lasse.faber@uni-jena.de' '2019-001'
 
 ##########################
 ## TEST CASE
@@ -931,6 +934,5 @@ fasta = '../test_data/bats_mx1_small.fasta'
 project_title = 'MX1 in bats'
 root_species = %w(Rousettus_aegyptiacus Pteropus_alecto Hypsignatus_monstrosus Eidolon_helvum)
 query_sequence_name = ''
-#Main.new('/home/hoelzer/poseidon', fasta, project_title, root_species, query_sequence_name, 'true', 'martin.hoelzer@uni-jena.de', '001')
-Main.new('/home/hoelzer/poseidon', fasta, project_title, root_species, query_sequence_name, 'true', 'martin.hoelzer@uni-jena.de', nil)
-
+Main.new('/home/hoelzer/poseidon', fasta, project_title, root_species, query_sequence_name, 'true', 'lasse.faber@uni-jena.de', '001')
+# Main.new('/home/hoelzer/poseidon', fasta, project_title, root_species, query_sequence_name, 'true', 'lasse.faber@uni-jena.de', nil)
