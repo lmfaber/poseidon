@@ -20,8 +20,8 @@ RUN gem install \
 
 # Install latex packages
 WORKDIR /usr/share/texmf/tex/latex/
-RUN wget http://mirrors.ctan.org/macros/latex/contrib/multirow.zip http://mirrors.ctan.org/macros/latex/contrib/booktabs.zip http://mirrors.ctan.org/macros/latex/required/tools.zip
-RUN unzip \*.zip
+RUN wget --quiet http://mirrors.ctan.org/macros/latex/contrib/multirow.zip http://mirrors.ctan.org/macros/latex/contrib/booktabs.zip http://mirrors.ctan.org/macros/latex/required/tools.zip
+RUN unzip -qq \*.zip
 RUN rm multirow.zip booktabs.zip tools.zip
 
 WORKDIR /usr/share/texmf/tex/latex/multirow
@@ -34,6 +34,12 @@ RUN latex tools.ins
 WORKDIR /usr/share/texmf
 RUN mktexlsr
 WORKDIR /home
+RUN wget --quiet https://github.com/lmfaber/poseidon/archive/0.1.zip -O poseidon.zip
+RUN unzip -qq poseidon.zip
+RUN rm poseidon.zip
+ENV PATH="PATH=${PATH}:/home/poseidon-0.1/ruby"
+
+
 
 # Ignore "hwloc has encountered what looks like an error from the operating system." errors. See: https://www.open-mpi.org/projects/hwloc/doc/v1.11.2/a00030.php
 ENV HWLOC_HIDE_ERRORS=1
