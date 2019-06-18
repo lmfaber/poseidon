@@ -1164,14 +1164,14 @@ if ($function == 1) {
 		$muscleoutfile=$out_file . '.aa_ali.fasta';	
 		open(LOG, ">$out_file.$pauser.log") || die "Cannot create file outfile.pauser.log: $out_file.$pauser.log\n";
 		#my $pid = open(PH, "$path"."muscle -in $muscleinfile -out $muscleoutfile 2>&1 |");              # or with an open pipe
-  		my $pid = open(PH, "$path"."../tools/muscle/muscle -in $muscleinfile -out $muscleoutfile 2>&1 |");        
+  		my $pid = open(PH, "$path"."muscle -in $muscleinfile -out $muscleoutfile 2>&1 |");        
 		while(<PH>) {
 			print STDERR $_;
 			print LOG $_;
 		}
 		close(LOG);
 		#system "$path/muscle -in $muscleinfile -out $muscleoutfile";
-		print STDERR "$path"."../tools/muscle/muscle -in $muscleinfile -out $muscleoutfile\n";
+		print STDERR "$path"."muscle -in $muscleinfile -out $muscleoutfile\n";
 	}
 	
 	elsif ($pauser eq "mafft") {
