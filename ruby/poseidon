@@ -4,6 +4,8 @@ class Main
 
   require 'bio'
   require 'fileutils'
+  require 'optparse'
+  require 'optparse/time'
 
   require_relative('fasta_format_checker')
   require_relative('translatorx_delete_gaps')
@@ -22,7 +24,7 @@ class Main
 
   attr_reader :timestamp, :succeded_poseidon_run, :mail_notes, :is_recombination
 
-  def initialize(dir, fasta, project_title, root_species, query_sequence_name, kh_insignificant_bp, user_mail, stamp)
+  def initialize(dir, fasta, project_title, root_species, query_sequence_name, kh_insignificant_bp, stamp)
 
     # if we need to refactor the alignment due to N's
     @refactor = false
@@ -88,7 +90,7 @@ class Main
 
     ## check fasta file and build a temporary file for further processing
     fasta_format_checker = FastaFormatChecker.new(fasta, @fasta_file, @internal2input_species, @input2internal_species, @log, @dir)
-    fasta_format_checker.check(@query_sequence_name, user_mail, @timestamp, @root_species)
+    fasta_format_checker.check(@query_sequence_name, @timestamp, @root_species)
     @fasta_file.close
     @mail_notes = fasta_format_checker.mail_notes
 
@@ -887,52 +889,84 @@ class String
 end
 
 
+require 'optparse'
 
-if 42 == 0
-######################################################################################################################################
-######################################################################################################################################
-## RUN
-dir = ARGV[0]
-fasta = ARGV[1]
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: poseidon --input input.fa --title mx1_in_bats --root-species TEST --reference-species TEST -kh TEST --output output_name\nUse poseidon --example for a test run."
+  opts.on("-d", "--dir=NAME", "Output directory.") do |d|
+    options[:dir] = d
+  end
+  opts.on("--input=NAME", "--require FASTAFILE", "Input multiple fasta file.") do |i|
+    options[:fasta] = i
+  end
+  opts.on("--title=NAME", "Project title.") do |t|
+    options[:title] = t
+  end
+  opts.on("-root", "--root-species=NAME", Array, "Root species.") do |r|
+    options[:root_species] = r
+  end
+  opts.on("-reference", "--reference-species=NAME", "Reference species.") do |ref|
+    options[:reference_species] = ref
+  end
+  opts.on("--kh", "kh option?") do |k_val|
+    options[:kh] = k_val
+  end
+  opts.on("--example", "Run a test example.") do |ex|
+    options[:example] = ex
+  end
+  opts.on("-h", "--help", "Prints this help") do
+    puts opts
+    exit
+  end
+end.parse!
 
-title = ARGV[2].gsub('---',' ')
-title = '' if title == 'NA'
-
-root_species = ARGV[3].gsub('---',' ')
-if root_species == 'NA'
-  root_species = nil
+if options[:example]
+  ## normal file, everything nice
+  fasta = '/home/poseidon-0.1.1/test_data/bats_mx1_small.fasta'
+  project_title = 'MX1 in bats'
+  root_species = %w(Rousettus_aegyptiacus Pteropus_alecto Hypsignatus_monstrosus Eidolon_helvum)
+  query_sequence_name = ''
+  Main.new('/home/output/example_output', fasta, project_title, root_species, query_sequence_name, 'true', '001')
 else
-  root_species = root_species.split(',')
+  begin
+    raise OptionParser::MissingArgument if options[:input].nil?
+  rescue OptionParser::ParseError => e
+    puts "#{e} --input"
+  end
+  
+  begin
+    raise OptionParser::MissingArgument if options[:dir].nil?
+  rescue OptionParser::ParseError => e
+    puts "#{e} --dir"
+  end
+
+  if !options[:title]
+    title = ''
+  else
+    title = options[:title]
+  end
+
+  if !options[:root_species]
+    root_species = nil
+  else
+    root_species = options[:root_species]
+  end
+
+  if !options[:reference_species]
+    reference_species = ''
+  else
+    reference_species = options[:reference_species]
+  end
+
+  if !options[:kh]
+    kh = true
+  else
+    kh = false
+  end
+  
+  time = Time.new
+  timestamp = "#{time.year}-#{time.month}-#{time.day}_#{time.hour}-#{time.min}-#{time.sec}"
+
+  Main.new(options[:dir], options[:fasta], title, root_species, reference_species, kh, timestamp)
 end
-
-reference_species = ARGV[4].gsub('---',' ')
-reference_species = '' if reference_species == 'NA'
-
-kh = ARGV[5]
-
-mail = ARGV[6].gsub('---',' ')
-mail = '' if mail == 'NA'
-
-output = ARGV[7]
-
-Main.new(dir, fasta, title, root_species, reference_species, kh, mail, output)
-# ./main.rb '/mnt/fass2/poseidon-webserver-dev/' '../test_data/bats_mx1.fasta' 'MX1 in bats' '['Rousettus_aegyptiacus', 'Pteropus_alecto', 'Hypsignatus_monstrosus', 'Eidolon_helvum']' '' 'true' 'martin.hoelzer@uni-jena.de' '2019-001'
-######################################################################################################################################
-######################################################################################################################################
-end
-
-
-# ./main.rb '/home/output' '/home/fasta/oas1.fasta' 'OAS1 in bats' '['Rousettus_aegyptiacus', 'Pteropus_alecto', 'Hypsignatus_monstrosus', 'Eidolon_helvum']' '' 'true' 'lasse.faber@uni-jena.de' '2019-001'
-# ./main.rb '/mnt/prostlocal/lasse/hiwi/bat/poseidon_results' '/mnt/prostlocal/lasse/hiwi/bat/poseidon_input/oas1.fa' 'OAS1 in bats' '['Pteropus_alecto']' '' 'true' 'lasse.faber@uni-jena.de' '2019-001'
-
-##########################
-## TEST CASE
-##########################
-
-## normal file, everything nice
-fasta = '../test_data/bats_mx1_small.fasta'
-project_title = 'MX1 in bats'
-root_species = %w(Rousettus_aegyptiacus Pteropus_alecto Hypsignatus_monstrosus Eidolon_helvum)
-query_sequence_name = ''
-Main.new('/home/hoelzer/poseidon', fasta, project_title, root_species, query_sequence_name, 'true', 'lasse.faber@uni-jena.de', '001')
-# Main.new('/home/hoelzer/poseidon', fasta, project_title, root_species, query_sequence_name, 'true', 'lasse.faber@uni-jena.de', nil)

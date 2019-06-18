@@ -22,7 +22,7 @@ class FastaFormatChecker
     @project_dir = project_dir
   end
 
-  def check(query_sequence_name, user_mail, timestamp, root_species)
+  def check(query_sequence_name, timestamp, root_species)
 
     begin
 
@@ -164,7 +164,7 @@ class FastaFormatChecker
       bn = File.basename(@fasta)
 
       if error_a.size > 0
-        send_mail(error_a.sort.uniq.join(''), user_mail, timestamp)
+        # send_mail(error_a.sort.uniq.join(''), user_mail, timestamp)
         @continue = false
         puts "There was a problem with the FASTA file (#{bn}), stop."
         @log << "There was a problem with the FASTA file (#{bn}), stop.\n"
@@ -179,73 +179,73 @@ class FastaFormatChecker
       puts "There was a more general problem with the Input file: #{bn}. Is it no FASTA?\n"
       file.close if file
 
-      send_mail("\nPoSeiDon was not able to read your input file: #{bn}. Please check if your input is in valid FASTA format.", user_mail, timestamp)
+      #send_mail("\nPoSeiDon was not able to read your input file: #{bn}. Please check if your input is in valid FASTA format.", user_mail, timestamp)
       @new_fasta.close
       @continue = false
     end
   end
 
-  def send_mail(message, user_mail, timestamp)
+  # def send_mail(message, user_mail, timestamp)
 
-    options = { :address              => 'smtp.uni-jena.de',
-                :port                 => 587,
-                :domain               => 'prost.bioinf.minet.uni-jena.de',
-                :user_name            => 'va93yit',
-                :password             => 'na1GPmneDntAy96ry0pVzw==\n'.decrypt(:symmetric, :algorithm => 'des-ecb', :password => 'PoSeiDon'),
-                :authentication       => 'plain',
-                :enable_starttls_auto => true  }
+  #   options = { :address              => 'smtp.uni-jena.de',
+  #               :port                 => 587,
+  #               :domain               => 'prost.bioinf.minet.uni-jena.de',
+  #               :user_name            => 'va93yit',
+  #               :password             => 'na1GPmneDntAy96ry0pVzw==\n'.decrypt(:symmetric, :algorithm => 'des-ecb', :password => 'PoSeiDon'),
+  #               :authentication       => 'plain',
+  #               :enable_starttls_auto => true  }
 
-    Mail.defaults do
-      delivery_method :smtp, options
-    end
+  #   Mail.defaults do
+  #     delivery_method :smtp, options
+  #   end
 
-    sw = Sprichwort.new
+  #   sw = Sprichwort.new
 
 
-    # send mail with results link to user
-    mail = mail(message, sw.sprichwort)
+  #   # send mail with results link to user
+  #   mail = mail(message, sw.sprichwort)
 
-    if user_mail.size > 1
-      Mail.deliver do
-        from 'poseidon@uni-jena.de'
-        to user_mail
-        subject "Your PoSeiDon run #{timestamp}"
-        body mail
-      end
-    end
-    Mail.deliver do
-      from 'poseidon@uni-jena.de'
-      to 'martin.hoelzer@uni-jena.de'
-      subject "A PoSeiDon run #{timestamp} was not finished for #{user_mail}"
-      body mail
-    end
+  #   if user_mail.size > 1
+  #     Mail.deliver do
+  #       from 'poseidon@uni-jena.de'
+  #       to user_mail
+  #       subject "Your PoSeiDon run #{timestamp}"
+  #       body mail
+  #     end
+  #   end
+  #   Mail.deliver do
+  #     from 'poseidon@uni-jena.de'
+  #     to 'martin.hoelzer@uni-jena.de'
+  #     subject "A PoSeiDon run #{timestamp} was not finished for #{user_mail}"
+  #     body mail
+  #   end
 
-  end
+  # end
 
-  def mail(error_message, sprichwort)
-    message = <<MESSAGE_END
-Dear user,
+#   def mail(error_message, sprichwort)
+#     message = <<MESSAGE_END
+# Dear user,
 
-a problem occurred with your submitted FASTA file (#{File.basename(@fasta)}) on the PoSeiDon web service:
+# a problem occurred with your submitted FASTA file (#{File.basename(@fasta)}) on the PoSeiDon web service:
 
-#########################################
-#{error_message}
-#########################################
+# #########################################
+# #{error_message}
+# #########################################
 
-Please note that the selection analysis requires coding nucleotide sequences with a correct open reading frame. Please check and upload your multiple FASTA file again: www.rna.uni-jena.de/poseidon
+# Please note that the selection analysis requires coding nucleotide sequences with a correct open reading frame. Please check and upload your multiple FASTA file again: www.rna.uni-jena.de/poseidon
 
-If you have any further problems, comments or feedback, don't hesitate to write me.
+# If you have any further problems, comments or feedback, don't hesitate to write me.
 
-Thank you very much for using the PoSeiDon web service.
+# Thank you very much for using the PoSeiDon web service.
 
-Cheers,
-Martin
+# Cheers,
+# Martin
 
-<><><><><><><><><><><><><><><><><><><><><><>
-#{sprichwort}
-<><><><><><><><><><><><><><><><><><><><><><>
-MESSAGE_END
-    message
-  end
+# <><><><><><><><><><><><><><><><><><><><><><>
+# #{sprichwort}
+# <><><><><><><><><><><><><><><><><><><><><><>
+# MESSAGE_END
+#     message
+#   end
 
 end
