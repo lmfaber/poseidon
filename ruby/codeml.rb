@@ -67,7 +67,8 @@ class Codeml
       parameter_string << "codeml #{dn}/codeml.ctl\n"
       Process.fork do
         Dir.chdir(dn){
-          log_file << `#{curr_path}/#{CODEML_BIN} codeml.ctl` unless File.exists?('codeml.mlc') #TODO
+          log_file << `#{CODEML_BIN} codeml.ctl` unless File.exists?('codeml.mlc') #TODO
+          # log_file << `#{curr_path}/#{CODEML_BIN} codeml.ctl` unless File.exists?('codeml.mlc') #TODO
           log_file.close
         }
       end
