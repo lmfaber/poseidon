@@ -923,7 +923,7 @@ end.parse!
 
 if options[:example]
   ## normal file, everything nice
-  fasta = '/home/poseidon-0.1.1/test_data/bats_mx1_small.fasta'
+  fasta = '/home/poseidon-0.1/test_data/bats_mx1_small.fasta'
   project_title = 'MX1 in bats'
   root_species = %w(Rousettus_aegyptiacus Pteropus_alecto Hypsignatus_monstrosus Eidolon_helvum)
   query_sequence_name = ''
@@ -933,12 +933,14 @@ else
     raise OptionParser::MissingArgument if options[:input].nil?
   rescue OptionParser::ParseError => e
     puts "#{e} --input"
+    exit
   end
   
   begin
     raise OptionParser::MissingArgument if options[:dir].nil?
   rescue OptionParser::ParseError => e
     puts "#{e} --dir"
+    exit
   end
 
   if !options[:title]
