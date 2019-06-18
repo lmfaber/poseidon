@@ -19,7 +19,7 @@ class Main
   require_relative('codeml_html')
   require_relative('parameter_html')
 
-  TRANSLATORX_BIN = '../tools/translatorx/translatorx.pl'
+  TRANSLATORX_BIN = 'translatorx.pl'
   POSEIDON_VERSION = '1.2'
 
   attr_reader :timestamp, :succeded_poseidon_run, :mail_notes, :is_recombination

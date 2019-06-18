@@ -12,9 +12,9 @@ require 'fileutils'
 
 class Html
 
-  LOGO_PNG = '../images/poseidon_logo.png'
-  PIPELINE = '../images/pipeline_landscape'
-  DETAILS_SUMMARY_MASTER = '../src/details-shim-master'
+  LOGO_PNG = '/home/poseidon-0.1/images/poseidon_logo.png'
+  PIPELINE = '/home/poseidon-0.1/images/pipeline_landscape'
+  DETAILS_SUMMARY_MASTER = '/home/poseidon-0.1/src/details-shim-master'
 
   def initialize(type, html_dir, out, translatorx_html, aa_aln, codeml_results, nt_tree, aa_tree, domain_pos, title, input_fasta, internal2input_species, input2internal_species, aln_length_with_gaps_adjustor, gard_html_file, nucleotide_bias_model, index_html_paths, tex_summary_file_path, tex_summary_file_path_gapped, tex_objects, refactored_aln, version, is_recomb, timestamp)
 

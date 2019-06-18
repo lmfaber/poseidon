@@ -4,10 +4,9 @@ class Phylo
 
   require 'bio'
 
-  RAXML_BIN = '../tools/raxml/8.0.25/raxmlHPC-PTHREADS-SSE3'
-  NW_DISPLAY_BIN = '../tools/nw_utilities/nw_display'
-  NW_REROOT_BIN = '../tools/nw_utilities/nw_reroot'
-  #INKSCAPE_BIN = '../tools/inkscape'
+  RAXML_BIN = 'raxmlHPC-PTHREADS-SSE3'
+  NW_DISPLAY_BIN = 'nw_display'
+  NW_REROOT_BIN = 'nw_reroot'
   INKSCAPE_BIN = 'inkscape'
 
   attr_accessor :tree_unshod, :tree_corrected, :tree_rooted

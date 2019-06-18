@@ -4,7 +4,7 @@ class ModelSelection
 
   attr_reader :model
 
-  MODEL_SELECTION_BATCH = '../tools/hyphy/lib/hyphy/TemplateBatchFiles/ModelTest.bf'
+  MODEL_SELECTION_BATCH = '/usr/lib/hyphy/TemplateBatchFiles/ModelTest.bf'
   
   #OPENMPI = '../tools/openmpi/bin/mpirun'
   OPENMPI = 'mpirun'

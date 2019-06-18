@@ -4,10 +4,9 @@ class Gard
 
   attr_reader :breakpoints, :gard_html_file, :mail_notes
 
-  GARD_TEMPLATE_BATCH = '../tools/hyphy/lib/hyphy/TemplateBatchFiles/GARD.bf'
-  GARD_PROCESSOR_TEMPLATE_BATCH = '../tools/hyphy/lib/hyphy/TemplateBatchFiles/GARDProcessor.bf'
+  GARD_TEMPLATE_BATCH = '/usr/lib/hyphy/TemplateBatchFiles/GARD.bf'
+  GARD_PROCESSOR_TEMPLATE_BATCH = '/usr/lib/hyphy/TemplateBatchFiles/GARDProcessor.bf'
 
-  # OPENMPI = '../tools/openmpi/bin/mpirun'
   OPENMPI = 'mpirun'
   
   OPENMPI_RUN = '--allow-run-as-root' # ONLY USE THIS FOR THE DOCKER IMAGE
