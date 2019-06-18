@@ -4,7 +4,7 @@
 
 class ParameterHtml
 
-  PARAM_TXT = '../tools/tools.txt'
+  PARAM_TXT = '/home/poseidon-0.1/tools/tools.txt'
 
   def initialize(parameter_html_out, html_index_file, frag_names, timestamp, version, parameter_strings)
 
@@ -46,7 +46,7 @@ class ParameterHtml
     param_file.close
 
     parameter_html_out << "\n<br><h2>The pipeline</h2>\n"
-    parameter_html_out << "<a href=\"../src/pipeline_landscape.pdf\"><img width=\"1200px\" src=\"../src/pipeline_landscape.png\"></a>\n"
+    parameter_html_out << "<a href=\"../images/pipeline_landscape.pdf\"><img width=\"1200px\" src=\"../images/pipeline_landscape.png\"></a>\n"
 
 
     parameter_html_out << '</div></div></body></html>'
