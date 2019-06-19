@@ -891,13 +891,13 @@ end
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: poseidon --input input.fa --title mx1_in_bats --root-species TEST --reference-species TEST -kh TEST --output output_name\nUse poseidon --example for a test run."
-  opts.on("-o", "--output=NAME", "Output directory.") do |d|
+  opts.on("-o", "--output=NAME", "Output directory. (Absolute path)") do |d|
     options[:output_dir] = d
   end
-  opts.on("-i", "--input=NAME", "Input multiple fasta file.") do |i|
+  opts.on("-i", "--input=NAME", "Input multiple fasta file. (Absolute path)") do |i|
     options[:input_fasta] = i
   end
-  opts.on("-t", "--title=NAME", "Project title.") do |t|
+  opts.on("-t", "--title=NAME", "Project title. (No spaces)") do |t|
     options[:title] = t
   end
   opts.on("-root", "--root-species=NAME", Array, "Comma separated list of root species. E.g. Escherichia_coli,") do |r|
@@ -908,6 +908,9 @@ OptionParser.new do |opts|
   end
   opts.on("--kh", "kh option?") do |k_val|
     options[:kh] = k_val
+  end
+  opts.on("--timestamp=NAME", "Timestamp") do |k_val|
+    options[:timestamp] = k_val
   end
   opts.on("--example", "Run a test example.") do |ex|
     options[:example] = ex
@@ -963,9 +966,13 @@ else
   else
     kh = false
   end
-  
-  time = Time.new
-  timestamp = "#{time.year}-#{time.month}-#{time.day}_#{time.hour}-#{time.min}-#{time.sec}"
+
+  if !options[:timestamp]
+    timestamp = nil
+  else
+    time = Time.new
+    timestamp = "#{time.year}-#{time.month}-#{time.day}_#{time.hour}-#{time.min}-#{time.sec}"
+  end
 
   Main.new(options[:output_dir], options[:input_fasta], title, root_species, reference_species, kh, timestamp)
 end
