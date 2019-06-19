@@ -5,7 +5,6 @@ class Main
   require 'bio'
   require 'fileutils'
   require 'optparse'
-  require 'optparse/time'
 
   require_relative('fasta_format_checker')
   require_relative('translatorx_delete_gaps')
@@ -889,21 +888,19 @@ class String
 end
 
 
-require 'optparse'
-
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: poseidon --input input.fa --title mx1_in_bats --root-species TEST --reference-species TEST -kh TEST --output output_name\nUse poseidon --example for a test run."
-  opts.on("-d", "--dir=NAME", "Output directory.") do |d|
-    options[:dir] = d
+  opts.on("-o", "--output=NAME", "Output directory.") do |d|
+    options[:output_dir] = d
   end
-  opts.on("--input=NAME", "--require FASTAFILE", "Input multiple fasta file.") do |i|
-    options[:fasta] = i
+  opts.on("-i", "--input=NAME", "Input multiple fasta file.") do |i|
+    options[:input_fasta] = i
   end
-  opts.on("--title=NAME", "Project title.") do |t|
+  opts.on("-t", "--title=NAME", "Project title.") do |t|
     options[:title] = t
   end
-  opts.on("-root", "--root-species=NAME", Array, "Root species.") do |r|
+  opts.on("-root", "--root-species=NAME", Array, "Comma separated list of root species. E.g. Escherichia_coli,") do |r|
     options[:root_species] = r
   end
   opts.on("-reference", "--reference-species=NAME", "Reference species.") do |ref|
@@ -930,16 +927,16 @@ if options[:example]
   Main.new('/home/output/example_output', fasta, project_title, root_species, query_sequence_name, 'true', '001')
 else
   begin
-    raise OptionParser::MissingArgument if options[:input].nil?
+    raise OptionParser::MissingArgument if options[:output_dir].nil?
   rescue OptionParser::ParseError => e
-    puts "#{e} --input"
+    puts "#{e} Please specify a writable output directory with -o/--output."
     exit
   end
   
   begin
-    raise OptionParser::MissingArgument if options[:dir].nil?
+    raise OptionParser::MissingArgument if options[:input_fasta].nil?
   rescue OptionParser::ParseError => e
-    puts "#{e} --dir"
+    puts "#{e} Please specify a fasta file with -i/--input."
     exit
   end
 
@@ -970,5 +967,5 @@ else
   time = Time.new
   timestamp = "#{time.year}-#{time.month}-#{time.day}_#{time.hour}-#{time.min}-#{time.sec}"
 
-  Main.new(options[:dir], options[:fasta], title, root_species, reference_species, kh, timestamp)
+  Main.new(options[:output_dir], options[:input_fasta], title, root_species, reference_species, kh, timestamp)
 end
