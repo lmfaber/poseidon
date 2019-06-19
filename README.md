@@ -1,5 +1,25 @@
 # PoSeiDon
 
+## Docker command:
+```
+docker run --rm --user $(id -u):$(id -g) -it --mount type=bind,source=/your/favorite/poseidon/folder,target=/home/output lmfaber/poseidon:latest /bin/bash
+```
+
+## Usage: 
+```
+Usage: poseidon --input /absolute/input.fa --output /absoulute/output/path
+Use poseidon --example for a test run.
+    -o, --output=NAME                Output directory. (Absolute path)
+    -i, --input=NAME                 Input multiple fasta file. (Absolute path)
+    -t, --title=NAME                 Project title. (No spaces)
+        --root-species=NAME          Comma separated list of root species. E.g. Escherichia_coli,
+    -r, --reference-species=NAME     Reference species.
+        --kh                         kh option?
+        --timestamp=NAME             Timestamp
+        --example                    Run a test example.
+    -h, --help                       Prints this help
+```
+
 Here we present __PoSeiDon__, a pipeline to detect significant positively selected sites and possible recombination events in analignment of multiple coding sequences. Sites that undergo positive selection can give you insights in the evolutionary history of your sequences, for example showing you important mutation hot spots, accumulated as results of virus-host arms races during evolution.
 
 We provide all ruby scripts needed to run the PoSeiDon pipeline.

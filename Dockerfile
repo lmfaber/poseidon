@@ -1,7 +1,4 @@
 FROM ubuntu:18.04
-LABEL MAINTAINER="lmfaber"
-
-# docker run --rm -it --mount type=bind,source=/mnt/prostlocal/lasse/hiwi/bat/oas_cds,target=/home/fasta,readonly --mount type=bind,source=/mnt/prostlocal/lasse/hiwi/bat/poseidon_results/,target=/home/output --mount type=bind,source=/mnt/prostlocal/lasse/hiwi/bat/poseidon/,target=/home/poseidon ubuntu:18.04 /bin/bash
 
 RUN apt-get update && apt-get install -y \
 	hyphy-mpi=2.2.7+dfsg-1 \
@@ -16,7 +13,6 @@ RUN gem install \
 	bio \
 	mail \
 	encrypted_strings
-
 
 # Install latex packages
 WORKDIR /usr/share/texmf/tex/latex/
@@ -34,12 +30,11 @@ RUN latex tools.ins
 WORKDIR /usr/share/texmf
 RUN mktexlsr
 WORKDIR /home
-RUN wget --quiet https://github.com/lmfaber/poseidon/archive/0.1.zip -O poseidon.zip
+ENV POSEIDON_VERSION 0.1
+RUN wget --quiet https://github.com/lmfaber/poseidon/archive/$POSEIDON_VERSION.zip -O poseidon.zip
 RUN unzip -qq poseidon.zip
 RUN rm poseidon.zip
-ENV PATH="PATH=${PATH}:/home/poseidon-0.1/ruby"
-
-
+ENV PATH="PATH=${PATH}:/home/poseidon-$POSEIDON_VERSION/ruby:/home/poseidon-$POSEIDON_VERSION/tools/muscle:/home/poseidon-$POSEIDON_VERSION/tools/nw_utilities:/home/poseidon-$POSEIDON_VERSION/tools/paml4:/home/poseidon-$POSEIDON_VERSION/tools/raxml/8.0.25:/home/poseidon-$POSEIDON_VERSION/tools/translatorx"
 
 # Ignore "hwloc has encountered what looks like an error from the operating system." errors. See: https://www.open-mpi.org/projects/hwloc/doc/v1.11.2/a00030.php
 ENV HWLOC_HIDE_ERRORS=1
